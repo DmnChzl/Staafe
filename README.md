@@ -1,53 +1,13 @@
 # Staafe - Stay Safe
 
-## TODO:
+> 0.1.0
 
-> Manifest V3
+Search the web quickly, directly from opening a new tab or from the popup. Based on the **DuckDuckGo** search engine, and its "strict" mode.
 
-```json
-{
-  "name": "Staafe - Stay Safe",
-  "short_name": "Staafe",
-  "version": "0.1.0",
-  "manifest_version": 3,
-  "description": "Search the web but stay safe",
-  "icons": {
-    "16": "icon16.png",
-    "32": "icon32.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
-  },
-  "permissions": ["storage"],
-  "host_permissions": ["https://safe.duckduckgo.com/*"],
-  "action": {
-    "default_icon": {
-      "16": "icon16.png",
-      "32": "icon32.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
-    },
-    "default_title": "Staafe",
-    "default_popup": "index.html"
-  },
-  "background": {
-    "service_worker": "background.js"
-  },
-  "chrome_url_overrides": {
-    "newtab": "index.html"
-  },
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "dmnchzl@staafe"
-    }
-  },
-  "web_accessible_resources": [
-    {
-      "resources": ["fonts/*.ttf", "icons/*.png"],
-      "matches": ["<all_urls>"]
-    }
-  ]
-}
-```
+## Preview
+
+![Light](./screenshots/light.png)
+![Dark](./screenshots/dark.png)
 
 ## Miscellaneous
 
