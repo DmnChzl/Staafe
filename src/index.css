@@ -1,0 +1,55 @@
+/* @import url('https://fonts.googleapis.com/css?family=Poppins:400,600'); */
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    min-width: 400px;
+    min-height: 600px;
+  }
+}
+
+@layer components {
+  .field {
+    @apply font-poppins z-20 h-12 w-full rounded-lg bg-white px-4 py-2 text-base text-slate-800 shadow outline-none placeholder:text-slate-400;
+  }
+
+  .button {
+    @apply z-20 flex h-12 items-center space-x-2 rounded-lg bg-white px-4 py-2 text-slate-800 shadow disabled:text-slate-400;
+  }
+
+  .list {
+    @apply scrollbar-none absolute top-12 left-0 right-0 z-20 my-4 max-h-[200px] w-full overflow-y-auto rounded-lg bg-white shadow;
+  }
+
+  .list-item {
+    @apply font-poppins cursor-pointer px-4 py-2 text-base text-slate-800 hover:bg-blue-100;
+  }
+}
+
+@layer utilities {
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none; /* F I R E F O X */
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none; /* C H R O M E */
+  }
+}
