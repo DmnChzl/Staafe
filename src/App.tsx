@@ -1,27 +1,38 @@
+import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import Hero from './components/Hero';
 import { Search } from './components/icons';
 import ToggleTheme from './components/ToggleTheme';
 import useDebounce from './hooks/useDebounce';
 import useField from './hooks/useField';
+import useOuterClick from './hooks/useOuterClick';
 import useToggle from './hooks/useToggle';
 import { getMessage } from './i18n';
+import type { Phrases } from './services/searchServices';
 import * as SearchServices from './services/searchServices';
 
-type Phrases = Array<{ phrase: string }>;
+const hasPopup = () => {
+  const searchParams = new URLSearchParams(window.location.search);
+  return searchParams.get('popup');
+};
 
-// prettier-ignore
-const goToDuckDuck = (query: string) => (window.location.href = `https://safe.duckduckgo.com/?q=${encodeURIComponent(query)}`);
+const redirect = (text: string) => {
+  window.location.href = `https://safe.duckduckgo.com/?q=${encodeURIComponent(text)}`;
+  // SearchServices.getRedirectUrl(text).then(({ url: redirectUrl }) => {
+  //   window.location.href = redirectUrl;
+  // });
+};
 
 export function App() {
   const [btnTxt, setBtnTxt] = useState('');
   const [isFocused, focusOn, focusOff] = useToggle();
   const [fieldValue, setFieldValue] = useField('');
   const [searchResults, setSearchResults] = useState<Phrases>([]);
+  const fieldRef = useOuterClick<HTMLDivElement>(focusOff);
 
   const debouncedFetch = useDebounce(() => {
     if (fieldValue.length > 0) {
-      SearchServices.askDuckDuckGo<Phrases>(fieldValue).then(phrases => {
+      SearchServices.askDuckDuckGo(fieldValue).then(phrases => {
         setSearchResults(phrases);
       });
     }
@@ -35,19 +46,22 @@ export function App() {
     debouncedFetch();
   }, [fieldValue]);
 
-  const timer = useRef<number>();
+  const timers = useRef<number[]>([]);
 
   /**
    * Handle hover on button (entering)
    */
   const handleMouseEnter = () => {
-    clearTimeout(timer.current);
+    timers.current.forEach(timer => clearTimeout(timer));
     const chars = getMessage('Button.Text').split('');
 
     chars.forEach((char, idx) => {
-      timer.current = setTimeout(() => {
-        setBtnTxt(currentLabel => (currentLabel += char));
-      }, 100 * idx);
+      timers.current = [
+        ...timers.current,
+        setTimeout(() => {
+          setBtnTxt(currentLabel => (currentLabel += char));
+        }, 100 * idx)
+      ];
     });
   };
 
@@ -55,18 +69,21 @@ export function App() {
    * Handle hover on button (leaving)
    */
   const handleMouseLeave = () => {
-    clearTimeout(timer.current);
+    timers.current.forEach(timer => clearTimeout(timer));
     const chars = btnTxt.split('');
 
     chars.forEach((_, idx) => {
-      timer.current = setTimeout(() => {
-        setBtnTxt(currentBtnTxt => currentBtnTxt.substring(0, currentBtnTxt.length - 1));
-      }, 50 * idx);
+      timers.current = [
+        ...timers.current,
+        setTimeout(() => {
+          setBtnTxt(currentBtnTxt => currentBtnTxt.substring(0, currentBtnTxt.length - 1));
+        }, 50 * idx)
+      ];
     });
   };
 
   return (
-    <div class="flex h-screen flex-col">
+    <div class={clsx('flex flex-col', hasPopup() ? 'h-[600px] w-[400px]' : 'h-screen w-screen')}>
       <Hero />
 
       <header class="flex h-20 shrink grow-0 flex-col items-end p-4">
@@ -74,20 +91,19 @@ export function App() {
       </header>
 
       <main class="flex flex-auto">
-        <div class="relative my-auto mx-8 w-full md:mx-auto md:w-1/2">
+        <div ref={fieldRef} class="relative my-auto mx-8 w-full md:mx-auto md:w-1/2">
           <div class="flex space-x-4">
             <input
               class="field"
               placeholder={getMessage('Input.Text')}
               onFocus={focusOn}
-              onBlur={focusOff}
               defaultValue={fieldValue}
               onInput={setFieldValue}
             />
 
             <button
               class="button"
-              onClick={() => goToDuckDuck(fieldValue)}
+              onClick={() => redirect(fieldValue)}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
               disabled={fieldValue.length === 0}>
@@ -99,7 +115,7 @@ export function App() {
           {isFocused && fieldValue.length > 0 && searchResults.length > 0 && (
             <ul class="list">
               {searchResults.map((result, idx) => (
-                <li key={idx} class="list-item" onClick={() => goToDuckDuck(result.phrase)} tabIndex={0}>
+                <li key={idx} class="list-item" onClick={() => redirect(result.phrase)} tabIndex={0}>
                   {result.phrase}
                 </li>
               ))}
@@ -111,10 +127,9 @@ export function App() {
       <footer class="flex h-20 shrink grow-0 flex-col justify-end">
         <span class="font-poppins mx-auto my-2 text-[12px] leading-[24px] tracking-wide text-slate-400">
           {getMessage('Footer.Text')}
-          <a href="https://safe.duckduckgo.com" target="_blank" class="hover:underline">
-            DuckDuckGo
+          <a href="https://www.dmnchzl.dev" target="_blank" class="hover:underline">
+            DmnChzl
           </a>
-          's Safe Search
         </span>
       </footer>
     </div>

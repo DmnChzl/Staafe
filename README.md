@@ -2,12 +2,27 @@
 
 > 0.1.0
 
-Search the web quickly, directly from opening a new tab or from the popup. Based on the **DuckDuckGo** search engine, and its "strict" mode.
+Search the web quickly, directly from opening a new tab or from the popup. Based on the **DuckDuckGo** search engine, and its "_strict_" mode.
 
 ## Preview
 
 ![Light](./screenshots/light.png)
 ![Dark](./screenshots/dark.png)
+
+## How To Install
+
+### Firefox
+
+1. Go To `about:config`
+2. Toggle `xpinstall.signatures.required` To **false**
+3. Go To `about:addons`
+4. Install Add-On From File
+
+### Chrome
+
+1. Go To `chrome://extensions`
+2. Toggle Developer Mode
+3. Load Unpacked
 
 ## Miscellaneous
 
@@ -50,6 +65,14 @@ yarn build:ext --overwrite-dest
 ```
 
 Enjoy 👍
+
+### Note
+
+Run the server:
+
+```
+deno run --import-map=import_map.json --allow-net server.ts --host=127.0.0.1 --port=1271 --cors
+```
 
 ## License
 

@@ -15,11 +15,6 @@
   html {
     font-family: 'Poppins', sans-serif;
   }
-
-  body {
-    min-width: 400px;
-    min-height: 600px;
-  }
 }
 
 @layer components {

@@ -19,7 +19,7 @@
       "128": "icons/128x128.png"
     },
     "default_title": "Staafe",
-    "default_popup": "index.html"
+    "default_popup": "index.html?popup=true"
   },
   "background": {
     "scripts": ["background.js"]

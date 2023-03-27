@@ -9,11 +9,11 @@ export const MESSAGES = {
   en: {
     'Button.Text': 'Search',
     'Input.Text': 'Search the web but stay safe',
-    'Footer.Text': 'Powered by '
+    'Footer.Text': 'Dɘsignɘd with ❤️ by '
   },
   fr: {
     'Button.Text': 'Rechercher',
     'Input.Text': 'Rechercher sur le web en toute sécurité',
-    'Footer.Text': 'Propulsé par '
+    'Footer.Text': 'Cønçu avec ❤️ par '
   }
 };

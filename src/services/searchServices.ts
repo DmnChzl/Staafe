@@ -12,6 +12,10 @@ interface RejectedMessage {
 
 type Message<T> = ResolvedMessage<T> | RejectedMessage;
 
+export type Phrases = Array<{ phrase: string }>;
+
+const SEARCH_ENGINE_URL = import.meta.env['VITE_SEARCH_ENGINE_URL'];
+
 const getBrowserInstance = (): typeof chrome => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const browserInstance = window.chrome || (window as any)['browser'];
@@ -19,14 +23,25 @@ const getBrowserInstance = (): typeof chrome => {
 };
 
 /**
- * Fetch DuckDuckGo #ProxyWay
- *
- * @param {string} query
+ * @method getRedirectUrl
+ * @param {string} text
+ * @returns {Promise} { url: redirectUrl }
+ */
+export const getRedirectUrl = async (text: string): Promise<{ url: string }> => {
+  return fetch(`${SEARCH_ENGINE_URL}/redirect?query=${encodeURIComponent(text)}`, {
+    method: 'GET'
+    // mode: 'no-cors'
+  }).then(response => response.json());
+};
+
+/**
+ * @method getAutoCompletePhrases #ServerWay
+ * @param {string} text
  * @returns {Promise} Phrases
  * @throws {string} Error msg
  */
-export const fetchDDG = async <T>(query: string): Promise<T> => {
-  return fetch(`http://localhost:1234/ddg/ac/?q=${encodeURIComponent(query)}`, {
+export const getAutoCompletePhrases = async (text: string): Promise<Phrases> => {
+  return fetch(`${SEARCH_ENGINE_URL}/autocomplete?query=${encodeURIComponent(text)}`, {
     method: 'GET',
     // mode: 'no-cors',
     headers: {
@@ -34,22 +49,40 @@ export const fetchDDG = async <T>(query: string): Promise<T> => {
     }
   })
     .then(response => response.json())
-    .then((data: T) => data)
+    .catch(err => err.message);
+};
+
+/**
+ * Fetch DuckDuckGo #ProxyWay
+ *
+ * @param {string} text
+ * @returns {Promise} Phrases
+ * @throws {string} Error msg
+ */
+export const fetchDuckDuckGo = async (text: string): Promise<Phrases> => {
+  return fetch(`http://localhost:1234/ddg/ac/?q=${encodeURIComponent(text)}`, {
+    method: 'GET',
+    // mode: 'no-cors',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(response => response.json())
     .catch(err => err.message);
 };
 
 /**
  * Fetch DuckDuckGo #BrowserWay
  *
- * @param {string} query
+ * @param {string} text
  * @returns {Promise} Phrases
  * @throws {string} Error msg
  */
-export const ddgMessage = async <T>(query: string): Promise<T> => {
+export const sendMessage = async (text: string): Promise<Phrases> => {
   return new Promise((resolve, reject) => {
     const browserInstance = getBrowserInstance();
 
-    browserInstance.runtime.sendMessage({ query: encodeURIComponent(query) }, (message: Message<T>) => {
+    browserInstance.runtime.sendMessage({ query: encodeURIComponent(text) }, (message: Message<Phrases>) => {
       if (message.status === 'fulfilled') {
         resolve(message.value);
       }
@@ -61,8 +94,7 @@ export const ddgMessage = async <T>(query: string): Promise<T> => {
   });
 };
 
-// prettier-ignore
-export const askDuckDuckGo = async <T>(query: string): Promise<T> => {
+export const askDuckDuckGo = async (query: string): Promise<Phrases> => {
   const mode = import.meta.env['MODE'];
-  return mode === 'production' ? ddgMessage<T>(query) : fetchDDG<T>(query);
-}
+  return mode === 'production' ? sendMessage(query) : fetchDuckDuckGo(query);
+};
