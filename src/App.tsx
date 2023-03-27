@@ -17,10 +17,10 @@ const hasPopup = () => {
 };
 
 const redirect = (text: string) => {
-  window.location.href = `https://safe.duckduckgo.com/?q=${encodeURIComponent(text)}`;
-  // SearchServices.getRedirectUrl(text).then(({ url: redirectUrl }) => {
-  //   window.location.href = redirectUrl;
-  // });
+  // window.location.href = `https://safe.duckduckgo.com/?q=${encodeURIComponent(text)}`;
+  SearchServices.getRedirectUrl(text).then(({ url: redirectUrl }) => {
+    window.location.href = redirectUrl;
+  });
 };
 
 export function App() {
@@ -32,7 +32,7 @@ export function App() {
 
   const debouncedFetch = useDebounce(() => {
     if (fieldValue.length > 0) {
-      SearchServices.askDuckDuckGo(fieldValue).then(phrases => {
+      SearchServices.getAutoCompletePhrases(fieldValue).then(phrases => {
         setSearchResults(phrases);
       });
     }
