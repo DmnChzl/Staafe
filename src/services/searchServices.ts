@@ -1,3 +1,5 @@
+import api from './api';
+
 interface ResolvedMessage<T> {
   url: string;
   status: 'fulfilled';
@@ -12,10 +14,6 @@ interface RejectedMessage {
 
 type Message<T> = ResolvedMessage<T> | RejectedMessage;
 
-export type Phrases = Array<{ phrase: string }>;
-
-const SEARCH_ENGINE_URL = import.meta.env['VITE_SEARCH_ENGINE_URL'];
-
 const getBrowserInstance = (): typeof chrome => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const browserInstance = window.chrome || (window as any)['browser'];
@@ -23,49 +21,29 @@ const getBrowserInstance = (): typeof chrome => {
 };
 
 /**
- * @method getRedirectUrl
- * @param {string} text
- * @returns {Promise} { url: redirectUrl }
+ * @method redirectTo
+ * @param {string} provider DDG // ECO
+ * @param {string} query Encoded Text
  */
-export const getRedirectUrl = async (text: string): Promise<{ url: string }> => {
-  return fetch(`${SEARCH_ENGINE_URL}/redirect?query=${encodeURIComponent(text)}`, {
+export const redirectTo = (provider: string, query: string) => {
+  const redirectUrl: string = api.redirect[provider as 'duckduckgo' | 'ecosia'](query);
+  window.location.href = redirectUrl;
+};
+
+/**
+ * @method fetchAutoCompleteSuggestions #ServerWay
+ * @param {string} provider DDG // ECO
+ * @param {string} text
+ * @returns {Promise} Suggestions
+ * @throws {string} Error msg
+ */
+export const fetchAutoCompleteSuggestions = async (provider: string, text: string): Promise<string[]> => {
+  const lowerProvider = provider.toLowerCase();
+  const lowerText = text.toLowerCase();
+
+  return fetch(api.autocomplete(lowerProvider, encodeURIComponent(lowerText)), {
     method: 'GET'
     // mode: 'no-cors'
-  }).then(response => response.json());
-};
-
-/**
- * @method getAutoCompletePhrases #ServerWay
- * @param {string} text
- * @returns {Promise} Phrases
- * @throws {string} Error msg
- */
-export const getAutoCompletePhrases = async (text: string): Promise<Phrases> => {
-  return fetch(`${SEARCH_ENGINE_URL}/autocomplete?query=${encodeURIComponent(text)}`, {
-    method: 'GET',
-    // mode: 'no-cors',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(response => response.json())
-    .catch(err => err.message);
-};
-
-/**
- * Fetch DuckDuckGo #ProxyWay
- *
- * @param {string} text
- * @returns {Promise} Phrases
- * @throws {string} Error msg
- */
-export const fetchDuckDuckGo = async (text: string): Promise<Phrases> => {
-  return fetch(`http://localhost:1234/ddg/ac/?q=${encodeURIComponent(text)}`, {
-    method: 'GET',
-    // mode: 'no-cors',
-    headers: {
-      'Content-Type': 'application/json'
-    }
   })
     .then(response => response.json())
     .catch(err => err.message);
@@ -74,27 +52,34 @@ export const fetchDuckDuckGo = async (text: string): Promise<Phrases> => {
 /**
  * Fetch DuckDuckGo #BrowserWay
  *
+ * @param {string} provider
  * @param {string} text
- * @returns {Promise} Phrases
+ * @returns {Promise} Suggestions
  * @throws {string} Error msg
  */
-export const sendMessage = async (text: string): Promise<Phrases> => {
+export const sendMessage = async (provider: string, text: string): Promise<string[]> => {
+  const lowerProvider = provider.toLowerCase();
+  const lowerText = text.toLowerCase();
+
   return new Promise((resolve, reject) => {
     const browserInstance = getBrowserInstance();
 
-    browserInstance.runtime.sendMessage({ query: encodeURIComponent(text) }, (message: Message<Phrases>) => {
-      if (message.status === 'fulfilled') {
-        resolve(message.value);
-      }
+    browserInstance.runtime.sendMessage(
+      { provider: lowerProvider, query: encodeURIComponent(lowerText) },
+      (message: Message<string[]>) => {
+        if (message.status === 'fulfilled') {
+          resolve(message.value);
+        }
 
-      if (message.status === 'rejected') {
-        reject(message.reason);
+        if (message.status === 'rejected') {
+          reject(message.reason);
+        }
       }
-    });
+    );
   });
 };
 
-export const askDuckDuckGo = async (query: string): Promise<Phrases> => {
-  const mode = import.meta.env['MODE'];
-  return mode === 'production' ? sendMessage(query) : fetchDuckDuckGo(query);
+export const getAutoCompleteSuggestions = async (...props: [string, string]): Promise<string[]> => {
+  const extensionMode = import.meta.env['VITE_EXTENSION_MODE'];
+  return extensionMode === 'true' ? sendMessage(...props) : fetchAutoCompleteSuggestions(...props);
 };

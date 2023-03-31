@@ -12,22 +12,36 @@ const ASCII = `
                           |___/
 `;
 
-const SAFE_SEARCH = 'https://safe.duckduckgo.com/';
-
-const API = {
-  AUTOCOMPLETE: '/autocomplete',
-  REDIRECT: '/redirect'
+const SEARCH_ENGINE = {
+  DDG: 'https://safe.duckduckgo.com',
+  ECO: 'https://ac.ecosia.org'
 };
 
-// ? Enum ?
-const REQUEST_METHOD = {
-  GET: 'GET',
-  POST: 'POST',
-  PUT: 'PUT',
-  PATCH: 'PATCH',
-  DELETE: 'DELETE',
-  OPTIONS: 'OPTIONS'
+const api: Record<string, Record<string, (query: string) => string>> = {
+  autocomplete: {
+    ddg: (query: string) => `${SEARCH_ENGINE.DDG}/ac/?q=${query}`,
+    eco: (query: string) => `${SEARCH_ENGINE.ECO}/?q=${query}`
+  }
 };
+
+enum RequestMethod {
+  Post = 'POST',
+  Get = 'GET',
+  Put = 'PUT',
+  Patch = 'PATCH',
+  Delete = 'DELETE',
+  Options = 'OPTIONS'
+}
+
+type DuckDuckGoResult = Array<{ phrase: string }>;
+
+interface EcosiaResult {
+  query: string;
+  suggestions: string[];
+}
+
+const isDuckDuckGo = (provider: string) => ['duckduckgo', 'ddg'].includes(provider);
+const isEcosia = (provider: string) => ['ecosia', 'eco'].includes(provider);
 
 class Server {
   host: string;
@@ -46,7 +60,7 @@ class Server {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE',
-        'Access-Control-Allow-Headers': 'Authorization, Content-Type'
+        'Access-Control-Allow-Headers': 'Content-Type'
       });
     }
 
@@ -60,49 +74,65 @@ class Server {
       const url = new URL(req.url);
 
       /**
-       * [GET] /autocomplete
-       * Route to get autocomplete phrases from query
+       * [GET] AutoComplete 'phrases' / 'suggestions' From 'provider' / 'query'
+       *
        * @returns "{ url, status: 'fulfilled', value }" || "{ url, status: 'rejected', reason }"
        */
-      if (url.pathname === API.AUTOCOMPLETE && REQUEST_METHOD.GET) {
+      if (url.pathname === '/autocomplete' && RequestMethod.Get) {
         const searchParams = new URLSearchParams(url.search);
+        const provider = searchParams.get('provider');
         const query = searchParams.get('query');
 
-        try {
-          const data = await fetch(`${SAFE_SEARCH}/ac/?q=${query}`, {
-            method: 'GET',
-            // mode: 'no-cors',
-            headers: {
-              'Content-Type': 'application/json'
+        if (!!provider) {
+          if (isDuckDuckGo(provider)) {
+            try {
+              const data = await fetch(api.autocomplete.ddg(query), {
+                method: 'GET',
+                // mode: 'no-cors',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              })
+                .then(response => response.json())
+                .then((data: DuckDuckGoResult) => data.map(({ phrase }) => phrase));
+
+              return new Response(JSON.stringify(data), { status: 200, headers });
+            } catch (err) {
+              return new Response(JSON.stringify(err), {
+                status: 500,
+                headers
+              });
             }
-          }).then(response => response.json());
+          }
 
-          return new Response(JSON.stringify(data), {
-            headers
-          });
-        } catch (err) {
-          return new Response(JSON.stringify(err), {
-            status: 500,
-            headers
-          });
+          if (isEcosia(provider)) {
+            try {
+              const data = await fetch(api.autocomplete.eco(query), {
+                method: 'GET',
+                // mode: 'no-cors',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              })
+                .then(response => response.json())
+                .then((data: EcosiaResult) => data.suggestions);
+
+              return new Response(JSON.stringify(data), { headers });
+            } catch (err) {
+              return new Response(JSON.stringify(err), {
+                status: 500,
+                headers
+              });
+            }
+          }
+
+          return new Response(JSON.stringify({ message: 'Unknown Provider' }), { status: 400, headers });
         }
+
+        return new Response(JSON.stringify({ message: 'No Provider' }), { status: 400, headers });
       }
 
-      /**
-       * [POST] /redirect
-       * Route to get the redirect URL from query
-       * @returns '{ url }'
-       */
-      if (url.pathname === API.REDIRECT && req.method === REQUEST_METHOD.GET) {
-        const searchParams = new URLSearchParams(url.search);
-        const query = searchParams.get('query');
-
-        return new Response(JSON.stringify({ url: `${SAFE_SEARCH}/?q=${query}` }), {
-          headers
-        });
-      }
-
-      if (this.cors && req.method === REQUEST_METHOD.OPTIONS) {
+      if (this.cors && req.method === RequestMethod.Options) {
         // ? Header: Content-Length '0'
         return new Response(null, {
           status: 204,

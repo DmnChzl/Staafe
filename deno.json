@@ -1,0 +1,10 @@
+{
+  "imports": {
+    "flags/": "https://deno.land/std@0.181.0/flags/",
+    "http/": "https://deno.land/std@0.181.0/http/"
+  },
+  "tasks": {
+    "dev": "deno run --allow-net --watch server.ts --host=127.0.0.1 --port=1271 --cors",
+    "start": "deno run --allow-net server.ts --host=127.0.0.1 --port=1271 --cors"
+  }
+}

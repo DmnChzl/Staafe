@@ -1,6 +1,6 @@
 # Staafe - Stay Safe
 
-> 0.1.0
+> 0.1.1
 
 Search the web quickly, directly from opening a new tab or from the popup. Based on the **DuckDuckGo** search engine, and its "_strict_" mode.
 

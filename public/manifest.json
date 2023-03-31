@@ -1,7 +1,7 @@
 {
   "name": "Staafe - Stay Safe",
   "short_name": "Staafe",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "manifest_version": 2,
   "description": "Search the web but stay safe",
   "icons": {
@@ -10,7 +10,7 @@
     "48": "icons/48x48.png",
     "128": "icons/128x128.png"
   },
-  "permissions": ["storage", "https://safe.duckduckgo.com/*"],
+  "permissions": ["storage", "https://staafe.dmnchzl.dev/*"],
   "browser_action": {
     "default_icon": {
       "16": "icons/16x16.png",
@@ -19,7 +19,7 @@
       "128": "icons/128x128.png"
     },
     "default_title": "Staafe",
-    "default_popup": "index.html?popup=true"
+    "default_popup": "index.html?history=true"
   },
   "background": {
     "scripts": ["background.js"]

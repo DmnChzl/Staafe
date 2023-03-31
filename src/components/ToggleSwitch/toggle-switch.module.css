@@ -1,0 +1,39 @@
+.switch {
+  position: relative;
+  display: inline-block;
+  height: 1.5rem;
+  width: 3rem;
+  cursor: pointer;
+  border-radius: 9999px;
+  background-color: #fff;
+  opacity: 0.5;
+  transition-property: opacity, transform;
+  transition-duration: 250ms;
+}
+
+.switch:hover {
+  opacity: 1;
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  background-color: #f97316;
+  top: 4px;
+  left: 4px;
+  transition-property: opacity, transform;
+  transition-duration: 250ms;
+}
+
+input[type='checkbox']:checked + .switch::after {
+  background-color: #22c55e;
+  transform: translateX(1.5rem);
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}

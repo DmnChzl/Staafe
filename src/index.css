@@ -19,11 +19,11 @@
 
 @layer components {
   .field {
-    @apply font-poppins z-20 h-12 w-full rounded-lg bg-white px-4 py-2 text-base text-slate-800 shadow outline-none placeholder:text-slate-400;
+    @apply font-poppins z-20 h-12 w-full truncate rounded-lg bg-white px-4 py-2 text-base text-gray-800 shadow outline-none placeholder:text-gray-400;
   }
 
   .button {
-    @apply z-20 flex h-12 items-center space-x-2 rounded-lg bg-white px-4 py-2 text-slate-800 shadow disabled:text-slate-400;
+    @apply z-20 flex h-12 items-center space-x-2 rounded-lg bg-white px-4 py-2 text-gray-800 shadow disabled:bg-gray-50 disabled:text-gray-400;
   }
 
   .list {
@@ -31,7 +31,11 @@
   }
 
   .list-item {
-    @apply font-poppins cursor-pointer px-4 py-2 text-base text-slate-800 hover:bg-blue-100;
+    @apply font-poppins cursor-pointer px-4 py-2 text-base text-gray-800;
+  }
+
+  .fade {
+    @apply absolute left-0 z-10 h-4 w-full from-[#f9fafb80] to-[#f9fafb00] dark:from-[#0f172a80] dark:to-[#0f172a00];
   }
 }
 

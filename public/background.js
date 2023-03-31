@@ -1,7 +1,7 @@
 const browserInstance = chrome || ['browser'];
 
 browserInstance.runtime.onMessage.addListener((request, _, sendResponse) => {
-  const url = `https://safe.duckduckgo.com/ac/?q=${request.query}`;
+  const url = `https://staafe.dmnchzl.dev/autocomplete?provider=${request.provider}&query=${request.query}`;
 
   fetch(url, {
     method: 'GET',

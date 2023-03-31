@@ -1,10 +1,10 @@
 interface Props {
   width?: number;
   height?: number;
-  class?: string; // className
+  className?: string;
 }
 
-export default function Moon(props: Props) {
+export default function Moon({ className, ...props }: Props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,6 +14,7 @@ export default function Moon(props: Props) {
       viewBox="0 0 24 24"
       stroke-width="1.5"
       stroke="currentColor"
+      class={className}
       {...props}>
       <path
         stroke-linecap="round"
