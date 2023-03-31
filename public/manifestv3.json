@@ -1,7 +1,7 @@
 {
   "name": "Staafe - Stay Safe",
   "short_name": "Staafe",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "manifest_version": 3,
   "description": "Search the web but stay safe",
   "icons": {
@@ -10,7 +10,7 @@
     "48": "icon48.png",
     "128": "icon128.png"
   },
-  "permissions": ["storage"],
+  "permissions": ["storage", "tabs"],
   "host_permissions": ["https://safe.duckduckgo.com/*", "https://www.ecosia.org/*"],
   "action": {
     "default_icon": {

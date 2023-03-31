@@ -23,7 +23,7 @@ const redirect = (provider: string, text: string) => {
   const lowerProvider = provider.toLowerCase();
   const lowerText = text.toLowerCase();
 
-  SearchServices.redirectTo(lowerProvider, encodeURIComponent(lowerText));
+  SearchServices.createTab(lowerProvider, encodeURIComponent(lowerText));
 };
 
 export default function History() {

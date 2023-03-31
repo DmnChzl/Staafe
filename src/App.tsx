@@ -95,7 +95,8 @@ export default function App() {
     redirect(searchEngine.value, searchText);
   };
 
-  const placeholder = getMessage('Input.Text', { provider: SEARCH_ENGINE_NAME[searchEngine.value] });
+  const placeHolder = getMessage('Input.Text', { provider: SEARCH_ENGINE_NAME[searchEngine.value] });
+  const footerText = getMessage('Footer.Text');
 
   return (
     <div class="flex h-screen w-screen flex-col">
@@ -116,7 +117,7 @@ export default function App() {
           <form class="flex space-x-4" onSubmit={handleSubmit}>
             <input
               class="field"
-              placeholder={placeholder}
+              placeholder={placeHolder}
               onFocus={focusOn}
               defaultValue={searchText}
               onInput={setSearchText}
@@ -155,10 +156,12 @@ export default function App() {
 
       <footer class="z-10 flex h-20 shrink grow-0 flex-col justify-end">
         <span class="font-poppins mx-auto my-2 text-[12px] leading-[24px] tracking-wide text-gray-400">
-          {getMessage('Footer.Text')}
-          <a href="https://www.dmnchzl.dev" target="_blank" class="hover:underline">
-            DmnChzl
-          </a>
+          {footerText}
+          {footerText && (
+            <a href="https://www.dmnchzl.dev" target="_blank" class="hover:underline">
+              DmnChzl
+            </a>
+          )}
         </span>
       </footer>
     </div>

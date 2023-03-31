@@ -31,6 +31,22 @@ export const redirectTo = (provider: string, query: string) => {
 };
 
 /**
+ * @method createTab
+ * @param {string} provider DDG // ECO
+ * @param {string} query Encoded Text
+ */
+export const createTab = (provider: string, query: string) => {
+  const redirectUrl: string = api.redirect[provider as 'ddg' | 'eco'](query);
+
+  try {
+    const browserInstance = getBrowserInstance();
+    browserInstance.tabs.create({ url: redirectUrl });
+  } catch {
+    window.location.href = redirectUrl;
+  }
+};
+
+/**
  * @method fetchAutoCompleteSuggestions #ServerWay
  * @param {string} provider DDG // ECO
  * @param {string} text
@@ -79,7 +95,8 @@ export const sendMessage = async (provider: string, text: string): Promise<strin
   });
 };
 
+const EXTENSION_MODE = import.meta.env['VITE_EXTENSION_MODE'] || 'false';
+
 export const getAutoCompleteSuggestions = async (...props: [string, string]): Promise<string[]> => {
-  const extensionMode = import.meta.env['VITE_EXTENSION_MODE'] || 'false';
-  return extensionMode === 'true' ? sendMessage(...props) : fetchAutoCompleteSuggestions(...props);
+  return EXTENSION_MODE === 'true' ? sendMessage(...props) : fetchAutoCompleteSuggestions(...props);
 };
