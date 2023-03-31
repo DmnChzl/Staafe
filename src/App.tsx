@@ -153,7 +153,7 @@ export default function App() {
         </div>
       </main>
 
-      <footer class="flex h-20 shrink grow-0 flex-col justify-end">
+      <footer class="z-10 flex h-20 shrink grow-0 flex-col justify-end">
         <span class="font-poppins mx-auto my-2 text-[12px] leading-[24px] tracking-wide text-gray-400">
           {getMessage('Footer.Text')}
           <a href="https://www.dmnchzl.dev" target="_blank" class="hover:underline">

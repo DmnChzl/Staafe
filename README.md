@@ -2,7 +2,7 @@
 
 > 1.0.0
 
-Search the web quickly, directly from opening a new tab or from the popup. Based on the **DuckDuckGo** and **Ecosia** search engines, and their "_strict_" mode.
+Search the web quickly, directly from opening a new tab. Based on the **DuckDuckGo** and **Ecosia** search engines, and their "_strict_" mode.
 
 ## Preview
 
