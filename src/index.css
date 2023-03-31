@@ -19,23 +19,35 @@
 
 @layer components {
   .field {
-    @apply font-poppins z-20 h-12 w-full truncate rounded-lg bg-white px-4 py-2 text-base text-gray-800 shadow outline-none placeholder:text-gray-400;
+    @apply font-poppins z-10 h-12 w-full truncate rounded-lg bg-white px-4 py-2 text-base text-gray-800 shadow outline-none placeholder:text-gray-400;
   }
 
   .button {
-    @apply z-20 flex h-12 items-center space-x-2 rounded-lg bg-white px-4 py-2 text-gray-800 shadow disabled:bg-gray-50 disabled:text-gray-400;
+    @apply z-10 flex h-12 items-center space-x-2 rounded-lg bg-white px-4 py-2 text-gray-800 shadow disabled:bg-gray-50 disabled:text-gray-400;
   }
 
-  .list {
-    @apply scrollbar-none absolute top-12 left-0 right-0 z-20 my-4 max-h-[200px] w-full overflow-y-auto rounded-lg bg-white shadow;
+  .autocomplete-list {
+    @apply scrollbar-none absolute top-12 left-0 right-0 z-10 my-4 max-h-[200px] w-full overflow-y-auto rounded-lg bg-white shadow;
   }
 
-  .list-item {
+  .autocomplete-item {
     @apply font-poppins cursor-pointer px-4 py-2 text-base text-gray-800;
   }
 
   .fade {
-    @apply absolute left-0 z-10 h-4 w-full from-[#f9fafb80] to-[#f9fafb00] dark:from-[#0f172a80] dark:to-[#0f172a00];
+    @apply absolute left-0 z-5 h-4 w-full from-[#f9fafb80] to-[#f9fafb00] dark:from-[#0f172a80] dark:to-[#0f172a00];
+  }
+
+  .queries-list {
+    @apply scrollbar-none flex h-full flex-col space-y-4 overflow-y-auto py-4;
+  }
+
+  .query-item {
+    @apply mx-4 flex scale-100 cursor-pointer items-center space-x-4 rounded-lg bg-gradient-to-r p-4 transition-transform duration-[250ms] hover:scale-105;
+  }
+
+  .fab {
+    @apply absolute bottom-8 left-[calc(50%-24px)] z-10 mx-auto flex h-12 w-12 items-center space-x-2 rounded-full bg-white px-4 py-2 text-gray-800 shadow transition-colors duration-[250ms] hover:bg-red-600 hover:text-white;
   }
 }
 

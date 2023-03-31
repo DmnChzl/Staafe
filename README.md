@@ -1,8 +1,8 @@
 # Staafe - Stay Safe
 
-> 0.1.1
+> 1.0.0
 
-Search the web quickly, directly from opening a new tab or from the popup. Based on the **DuckDuckGo** search engine, and its "_strict_" mode.
+Search the web quickly, directly from opening a new tab or from the popup. Based on the **DuckDuckGo** and **Ecosia** search engines, and their "_strict_" mode.
 
 ## Preview
 
@@ -71,7 +71,7 @@ Enjoy 👍
 Run the server:
 
 ```
-deno run --import-map=import_map.json --allow-net server.ts --host=127.0.0.1 --port=1271 --cors
+deno run --allow-net server.ts --host=127.0.0.1 --port=1271 --cors
 ```
 
 ## License

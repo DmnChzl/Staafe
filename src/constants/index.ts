@@ -17,3 +17,13 @@ export const MESSAGES = {
     'Footer.Text': 'Cønçu avec ❤️ par '
   }
 };
+
+export const SEARCH_ENGINE_ALIAS: Record<string, string> = {
+  DDG: 'ddg',
+  ECO: 'eco'
+};
+
+export const SEARCH_ENGINE_NAME: Record<string, string> = {
+  ddg: 'DuckDuckGo',
+  eco: 'Ecosia'
+};

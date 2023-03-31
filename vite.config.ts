@@ -11,6 +11,12 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
         rewrite: path => path.replace(/^\/ddg/, '')
+      },
+      '/eco': {
+        target: 'https://ac.ecosia.org',
+        changeOrigin: true,
+        secure: false,
+        rewrite: path => path.replace(/^\/eco/, '')
       }
     },
     port: 1234

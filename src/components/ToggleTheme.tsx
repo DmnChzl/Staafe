@@ -9,7 +9,7 @@ export default function ToggleTheme() {
   useEffect(() => {
     const item = StorageServices.getItem<{ theme?: string }>(ITEM_KEY);
 
-    // Check if 'localStorage' has theme value
+    // Check if 'localStorage' has theme value + Apply it!
     if (item?.theme && item.theme === THEME.DARK) {
       document.documentElement.classList.add(THEME.DARK);
       setTheme(THEME.DARK);
@@ -46,7 +46,7 @@ export default function ToggleTheme() {
   };
 
   return (
-    <button class="z-20 m-4 text-white opacity-50 transition-opacity hover:opacity-100" onClick={toggleTheme}>
+    <button class="z-10 m-4 text-white opacity-50 transition-opacity hover:opacity-100" onClick={toggleTheme}>
       {theme === THEME.DARK ? <Moon /> : <Sun />}
     </button>
   );

@@ -1,12 +1,9 @@
 import { computed, effect, signal } from '@preact/signals';
-import { ITEM_KEY } from './constants';
+import { ITEM_KEY, SEARCH_ENGINE_ALIAS as SEARCH_ENGINE } from './constants';
+import type { Query } from './interfaces';
 import * as StorageServices from './services/storageServices';
 
-const SEARCH_ENGINE = {
-  DDG: 'DuckDuckGo',
-  ECO: 'Ecosia'
-};
-
+// Get default 'searchEngine' signal's value
 const getSearchEngine = () => {
   const item = StorageServices.getItem<{ provider?: string }>(ITEM_KEY);
   return item?.provider || SEARCH_ENGINE.DDG;
@@ -14,6 +11,7 @@ const getSearchEngine = () => {
 
 export const searchEngine = signal<string>(getSearchEngine());
 
+// Update 'localStorage' each time 'searchEngine' signal's value changes
 effect(() => {
   StorageServices.setItem(ITEM_KEY, { provider: searchEngine.value });
 });
@@ -31,12 +29,7 @@ export const toggleSearchEngine = () => {
   }
 };
 
-interface Query {
-  timestamp: number;
-  provider: string;
-  text: string;
-}
-
+// Get default 'queries' signal's value
 const getQueries = () => {
   const item = StorageServices.getItem<{ queries?: Query[] }>(ITEM_KEY);
   return item?.queries || [];
@@ -44,6 +37,7 @@ const getQueries = () => {
 
 export const queries = signal<Query[]>(getQueries());
 
+// Update 'localStorage' each time 'queries' signal's value changes
 effect(() => {
   StorageServices.setItem(ITEM_KEY, { queries: queries.value });
 });

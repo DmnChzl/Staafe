@@ -14,7 +14,7 @@ export default function Hero() {
     <div class="absolute inset-0 h-screen w-screen p-4">
       <div
         class={clsx(
-          'z-10 flex h-1/2 w-full rounded-lg bg-gradient-to-r',
+          'z-5 flex h-1/2 w-full rounded-lg bg-gradient-to-r',
           isEcoSearchEngine.value && 'from-emerald-500 via-green-500 to-lime-500',
           !isEcoSearchEngine.value && 'from-red-500 via-orange-500 to-amber-500'
         )}>

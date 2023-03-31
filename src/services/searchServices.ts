@@ -26,7 +26,7 @@ const getBrowserInstance = (): typeof chrome => {
  * @param {string} query Encoded Text
  */
 export const redirectTo = (provider: string, query: string) => {
-  const redirectUrl: string = api.redirect[provider as 'duckduckgo' | 'ecosia'](query);
+  const redirectUrl: string = api.redirect[provider as 'ddg' | 'eco'](query);
   window.location.href = redirectUrl;
 };
 
@@ -50,9 +50,9 @@ export const fetchAutoCompleteSuggestions = async (provider: string, text: strin
 };
 
 /**
- * Fetch DuckDuckGo #BrowserWay
+ * Fetch Suggestions #BrowserWay
  *
- * @param {string} provider
+ * @param {string} provider DDG // ECO
  * @param {string} text
  * @returns {Promise} Suggestions
  * @throws {string} Error msg
@@ -80,6 +80,6 @@ export const sendMessage = async (provider: string, text: string): Promise<strin
 };
 
 export const getAutoCompleteSuggestions = async (...props: [string, string]): Promise<string[]> => {
-  const extensionMode = import.meta.env['VITE_EXTENSION_MODE'];
+  const extensionMode = import.meta.env['VITE_EXTENSION_MODE'] || 'false';
   return extensionMode === 'true' ? sendMessage(...props) : fetchAutoCompleteSuggestions(...props);
 };

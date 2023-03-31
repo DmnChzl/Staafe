@@ -6,9 +6,8 @@ const api = {
   // prettier-ignore
   autocomplete: (provider: string, query: string) => `${AUTOCOMPLETE_URL}/autocomplete?provider=${provider}&query=${query}`,
   redirect: {
-    // TODO: ddg // eco
-    duckduckgo: (query: string) => `${DDG_URL}/?q=${query}`,
-    ecosia: (query: string) => `${ECO_URL}/search?q=${query}&sfs=true`
+    ddg: (query: string) => `${DDG_URL}/?q=${query}`,
+    eco: (query: string) => `${ECO_URL}/search?q=${query}&sfs=true`
   }
 };
 
