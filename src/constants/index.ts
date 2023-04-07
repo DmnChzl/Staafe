@@ -6,15 +6,30 @@ export const THEME = {
 };
 
 export const MESSAGES = {
+  de: {
+    'Button.Text': 'Suche',
+    'Input.Text': 'Durchsuchen Sie das Internet mit {{provider}}',
+    'Footer.Text': 'Mit ❤️ dɘsignt von '
+  },
   en: {
     'Button.Text': 'Search',
-    'Input.Text': 'Search the web with {{provider}}', // but stay safe
+    'Input.Text': 'Search the Web with {{provider}}',
     'Footer.Text': 'Dɘsignɘd with ❤️ by '
+  },
+  es: {
+    'Button.Text': 'Buscar',
+    'Input.Text': 'Buscar en la Web con {{provider}}',
+    'Footer.Text': 'Diseñadø con ❤️ por '
   },
   fr: {
     'Button.Text': 'Rechercher',
-    'Input.Text': 'Rechercher sur le web avec {{provider}}', // en toute sécurité
+    'Input.Text': 'Rechercher sur le Web avec {{provider}}',
     'Footer.Text': 'Cønçu avec ❤️ par '
+  },
+  it: {
+    'Button.Text': 'Cerca',
+    'Input.Text': 'Cerca nel Web con {{provider}}',
+    'Footer.Text': 'Disegnatø con ❤️ da '
   }
 };
 

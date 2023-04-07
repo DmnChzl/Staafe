@@ -3,7 +3,7 @@
   "short_name": "Staafe",
   "version": "1.0.1",
   "manifest_version": 3,
-  "description": "Search the web but stay safe",
+  "description": "Search the Web but stay safe",
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",

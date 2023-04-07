@@ -11,7 +11,7 @@ interface Props {
 
 export default function ToggleSwitch({ className, id = getRandomString(), ...props }: Props) {
   return (
-    <div class={className} style={{ style: 'relative' }}>
+    <div class={className} style={{ position: 'relative' }}>
       <input class={styles.offscreen} id={id} type="checkbox" {...props} />
       <label class={styles.switch} for={id} />
     </div>
